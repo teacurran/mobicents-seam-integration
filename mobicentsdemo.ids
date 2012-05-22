@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="dataSourceStorage">
+  <DataSource DataSourceSourceName="LOCAL">
+    <option name="DRIVER_CLASS" value="com.mysql.jdbc.Driver" />
+    <option name="DATABASE_URL" value="jdbc:mysql://127.0.0.1/mobicentsdemo" />
+    <option name="DRIVER_PATH" />
+    <option name="DATBASE_USERNAME" value="root" />
+    <option name="ENCODED_DATABASE_PASSWORD" value="dfd8dfc5dfc5dfde" />
+    <option name="DEFAULT_SCHEMA_NAME" />
+    <option name="TABLE_PATTERN" value="" />
+    <option name="UUID" value="5530a5ff-9445-4daa-a9e5-4d8da058b011" />
+    <option name="NAME" value="mobicentsdemoDatasource" />
+    <option name="DATABASE_PRODUCT_NAME" value="MySQL" />
+    <option name="DATABASE_PRODUCT_VERSION" value="5.1.34-log" />
+    <TABLE_DATA>
+      <option name="NAME" value="phoneCall" />
+      <option name="SCHEMA" />
+      <option name="CATALOG" value="mobicentsdemo" />
+      <option name="TYPE" value="TABLE" />
+      <FIELD_ELEMENT>
+        <option name="NAME" value="id" />
+        <option name="SQL_TYPE" value="INT" />
+        <option name="JDBC_TYPE" value="4" />
+        <option name="TYPE" />
+        <option name="PRIMARY" value="true" />
+        <option name="LENGTH" value="10" />
+        <option name="PRECISION" value="0" />
+        <option name="NULLABLE" value="false" />
+      </FIELD_ELEMENT>
+      <FIELD_ELEMENT>
+        <option name="NAME" value="dateStart" />
+        <option name="SQL_TYPE" value="DATETIME" />
+        <option name="JDBC_TYPE" value="93" />
+        <option name="TYPE" />
+        <option name="PRIMARY" value="false" />
+        <option name="LENGTH" value="19" />
+        <option name="PRECISION" value="0" />
+        <option name="NULLABLE" value="true" />
+      </FIELD_ELEMENT>
+      <FIELD_ELEMENT>
+        <option name="NAME" value="dateEnd" />
+        <option name="SQL_TYPE" value="DATETIME" />
+        <option name="JDBC_TYPE" value="93" />
+        <option name="TYPE" />
+        <option name="PRIMARY" value="false" />
+        <option name="LENGTH" value="19" />
+        <option name="PRECISION" value="0" />
+        <option name="NULLABLE" value="true" />
+      </FIELD_ELEMENT>
+      <FIELD_ELEMENT>
+        <option name="NAME" value="fromAddress" />
+        <option name="SQL_TYPE" value="VARCHAR" />
+        <option name="JDBC_TYPE" value="12" />
+        <option name="TYPE" />
+        <option name="PRIMARY" value="false" />
+        <option name="LENGTH" value="100" />
+        <option name="PRECISION" value="0" />
+        <option name="NULLABLE" value="true" />
+      </FIELD_ELEMENT>
+      <FIELD_ELEMENT>
+        <option name="NAME" value="toAddress" />
+        <option name="SQL_TYPE" value="VARCHAR" />
+        <option name="JDBC_TYPE" value="12" />
+        <option name="TYPE" />
+        <option name="PRIMARY" value="false" />
+        <option name="LENGTH" value="100" />
+        <option name="PRECISION" value="0" />
+        <option name="NULLABLE" value="true" />
+      </FIELD_ELEMENT>
+      <FIELD_ELEMENT>
+        <option name="NAME" value="dtmf" />
+        <option name="SQL_TYPE" value="VARCHAR" />
+        <option name="JDBC_TYPE" value="12" />
+        <option name="TYPE" />
+        <option name="PRIMARY" value="false" />
+        <option name="LENGTH" value="300" />
+        <option name="PRECISION" value="0" />
+        <option name="NULLABLE" value="true" />
+      </FIELD_ELEMENT>
+    </TABLE_DATA>
+    <TABLE_DATA>
+      <option name="NAME" value="session" />
+      <option name="SCHEMA" />
+      <option name="CATALOG" value="mobicentsdemo" />
+      <option name="TYPE" value="TABLE" />
+      <FIELD_ELEMENT>
+        <option name="NAME" value="id" />
+        <option name="SQL_TYPE" value="INT" />
+        <option name="JDBC_TYPE" value="4" />
+        <option name="TYPE" />
+        <option name="PRIMARY" value="true" />
+        <option name="LENGTH" value="10" />
+        <option name="PRECISION" value="0" />
+        <option name="NULLABLE" value="false" />
+      </FIELD_ELEMENT>
+      <FIELD_ELEMENT>
+        <option name="NAME" value="dateCreated" />
+        <option name="SQL_TYPE" value="DATETIME" />
+        <option name="JDBC_TYPE" value="93" />
+        <option name="TYPE" />
+        <option name="PRIMARY" value="false" />
+        <option name="LENGTH" value="19" />
+        <option name="PRECISION" value="0" />
+        <option name="NULLABLE" value="true" />
+      </FIELD_ELEMENT>
+      <FIELD_ELEMENT>
+        <option name="NAME" value="dateValidated" />
+        <option name="SQL_TYPE" value="DATETIME" />
+        <option name="JDBC_TYPE" value="93" />
+        <option name="TYPE" />
+        <option name="PRIMARY" value="false" />
+        <option name="LENGTH" value="19" />
+        <option name="PRECISION" value="0" />
+        <option name="NULLABLE" value="true" />
+      </FIELD_ELEMENT>
+      <FIELD_ELEMENT>
+        <option name="NAME" value="callId" />
+        <option name="SQL_TYPE" value="INT" />
+        <option name="JDBC_TYPE" value="4" />
+        <option name="TYPE" />
+        <option name="PRIMARY" value="false" />
+        <option name="LENGTH" value="10" />
+        <option name="PRECISION" value="0" />
+        <option name="NULLABLE" value="true" />
+      </FIELD_ELEMENT>
+      <RELATIONSHIP_ELEMENT>
+        <option name="RELATION_NAME" value="fk_session_call" />
+        <option name="TARGET_TABLE" value="phonecall" />
+        <option name="TARGET_SCHEMA" />
+        <option name="TARGET_CATALOG" value="mobicentsdemo" />
+        <option name="TARGET_COLUMN" value="id" />
+        <option name="SOURCE_COLUMN" value="callId" />
+        <option name="CASCADE_REMOVE" value="false" />
+        <option name="CASCADE_UPDATE" value="false" />
+      </RELATIONSHIP_ELEMENT>
+    </TABLE_DATA>
+    <libraries>
+      <library>
+        <url>jar:///Users/tea/dev/ApproachingPi/mobicents/mobicentsdemo/lib/mysql-connector-java-5.1.6-bin.jar!/</url>
+      </library>
+    </libraries>
+  </DataSource>
+</component>
+

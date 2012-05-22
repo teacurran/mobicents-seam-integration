@@ -1,0 +1,194 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <h:form id="callSearch" styleClass="edit">
+
+        <rich:simpleTogglePanel label="Call Search Filter" switchType="ajax">
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Dtmf</ui:define>
+                <h:inputText id="dtmf" value="#{callList.call.dtmf}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">From</ui:define>
+                <h:inputText id="from" value="#{callList.call.from}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">To</ui:define>
+                <h:inputText id="to" value="#{callList.call.to}"/>
+            </s:decorate>
+
+            <s:decorate template="layout/display.xhtml">
+                <ui:define name="label">Match</ui:define>
+                <h:selectOneRadio id="logic" value="#{callList.restrictionLogicOperator}" styleClass="radio">
+                    <f:selectItem itemLabel="All" itemValue="and"/>
+                    <f:selectItem itemLabel="Any" itemValue="or"/>
+                </h:selectOneRadio>
+            </s:decorate>
+
+        </rich:simpleTogglePanel>
+
+        <div class="actionButtons">
+            <h:commandButton id="search" value="Search" action="/CallList.xhtml"/>
+            <s:button id="reset" value="Reset" includePageParams="false"/>
+        </div>
+
+    </h:form>
+
+    <rich:panel>
+        <f:facet name="header">Call Search Results (#{empty callList.resultList ? 0 : (callList.paginated ? callList.resultCount : callList.resultList.size)})</f:facet>
+    <div class="results" id="callList">
+
+    <h:outputText value="The call search returned no results."
+               rendered="#{empty callList.resultList}"/>
+
+    <rich:dataTable id="callList"
+                var="_call"
+              value="#{callList.resultList}"
+           rendered="#{not empty callList.resultList}">
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{callList}"/>
+                    <ui:param name="propertyLabel" value="Id"/>
+                    <ui:param name="propertyPath" value="call.id"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_call.id}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{callList}"/>
+                    <ui:param name="propertyLabel" value="Date end"/>
+                    <ui:param name="propertyPath" value="call.dateEnd"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_call.dateEnd}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{callList}"/>
+                    <ui:param name="propertyLabel" value="Date start"/>
+                    <ui:param name="propertyPath" value="call.dateStart"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_call.dateStart}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{callList}"/>
+                    <ui:param name="propertyLabel" value="Dtmf"/>
+                    <ui:param name="propertyPath" value="call.dtmf"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_call.dtmf}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{callList}"/>
+                    <ui:param name="propertyLabel" value="From"/>
+                    <ui:param name="propertyPath" value="call.from"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_call.from}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <ui:include src="layout/sort.xhtml">
+                    <ui:param name="entityList" value="#{callList}"/>
+                    <ui:param name="propertyLabel" value="To"/>
+                    <ui:param name="propertyPath" value="call.to"/>
+                </ui:include>
+            </f:facet>
+            <h:outputText value="#{_call.to}"/>
+        </h:column>
+        <rich:column styleClass="action">
+            <f:facet name="header">Action</f:facet>
+            <s:link view="/#{empty from ? 'Call' : from}.xhtml"
+                   value="#{empty from ? 'View' : 'Select'}"
+             propagation="#{empty from ? 'none' : 'default'}"
+                      id="callViewId">
+                <f:param name="callId"
+                        value="#{_call.id}"/>
+            </s:link>
+            #{' '}
+            <s:link view="/CallEdit.xhtml"
+                   value="Edit"
+             propagation="none"
+                      id="callEdit"
+                rendered="#{empty from}">
+                <f:param name="callId"
+                        value="#{_call.id}"/>
+            </s:link>
+        </rich:column>
+    </rich:dataTable>
+
+    </div>
+    </rich:panel>
+
+    <div class="tableControl">
+
+        <s:link view="/CallList.xhtml"
+            rendered="#{callList.previousExists}"
+               value="#{messages.left}#{messages.left} First Page"
+                  id="firstPage">
+          <f:param name="firstResult" value="0"/>
+        </s:link>
+
+        <s:link view="/CallList.xhtml"
+            rendered="#{callList.previousExists}"
+               value="#{messages.left} Previous Page"
+                  id="previousPage">
+            <f:param name="firstResult"
+                    value="#{callList.previousFirstResult}"/>
+        </s:link>
+
+        <s:link view="/CallList.xhtml"
+            rendered="#{callList.nextExists}"
+               value="Next Page #{messages.right}"
+                  id="nextPage">
+            <f:param name="firstResult"
+                    value="#{callList.nextFirstResult}"/>
+        </s:link>
+
+        <s:link view="/CallList.xhtml"
+            rendered="#{callList.nextExists}"
+               value="Last Page #{messages.right}#{messages.right}"
+                  id="lastPage">
+            <f:param name="firstResult"
+                    value="#{callList.lastFirstResult}"/>
+        </s:link>
+
+    </div>
+
+    <s:div styleClass="actionButtons" rendered="#{empty from}">
+        <s:button view="/CallEdit.xhtml"
+                    id="create"
+           propagation="none"
+                 value="Create call">
+            <f:param name="callId"/>
+        </s:button>
+    </s:div>
+
+</ui:define>
+
+</ui:composition>

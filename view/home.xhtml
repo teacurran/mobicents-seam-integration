@@ -1,0 +1,31 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a="http://richfaces.org/a4j"
+    template="layout/template.xhtml">
+
+    <ui:define name="body">
+
+		<a:form id="statusForm">
+			<h1>Your access code is #{main.session.id}</h1>#{' '}<a:commandButton action="#{main.resetSession()}" reRender="statusForm" value="get new code"/>
+			<rich:panel id="statusBox">
+				Please call: 1 (617) 517-3035 and enter the above code <br/><br/>
+				
+				Code created at: #{main.session.dateCreated}<br />
+				<h:outputText rendered="#{empty main.session.dateValidated}">
+					This code has not yet been validated<br />
+				</h:outputText>
+				<h:outputText rendered="#{not empty main.session.dateValidated}">
+					Code validated at: #{main.session.dateValidated}<br/>
+					By: #{main.session.call.fromAddress}
+				</h:outputText>
+			</rich:panel>
+			<a:poll action="#{main.refreshSession()}" reRender="statusForm" interval="5000"/>
+	    </a:form>
+    </ui:define>
+</ui:composition>

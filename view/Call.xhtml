@@ -1,0 +1,125 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <rich:panel>
+        <f:facet name="header">Call Details</f:facet>
+
+        <s:decorate id="id" template="layout/display.xhtml">
+            <ui:define name="label">Id</ui:define>
+            <h:outputText value="#{callHome.instance.id}"/>
+        </s:decorate>
+
+        <s:decorate id="dateEnd" template="layout/display.xhtml">
+            <ui:define name="label">Date end</ui:define>
+            <h:outputText value="#{callHome.instance.dateEnd}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </s:decorate>
+
+        <s:decorate id="dateStart" template="layout/display.xhtml">
+            <ui:define name="label">Date start</ui:define>
+            <h:outputText value="#{callHome.instance.dateStart}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </s:decorate>
+
+        <s:decorate id="dtmf" template="layout/display.xhtml">
+            <ui:define name="label">Dtmf</ui:define>
+            <h:outputText value="#{callHome.instance.dtmf}"/>
+        </s:decorate>
+
+        <s:decorate id="from" template="layout/display.xhtml">
+            <ui:define name="label">From</ui:define>
+            <h:outputText value="#{callHome.instance.from}"/>
+        </s:decorate>
+
+        <s:decorate id="to" template="layout/display.xhtml">
+            <ui:define name="label">To</ui:define>
+            <h:outputText value="#{callHome.instance.to}"/>
+        </s:decorate>
+
+        <div style="clear:both"/>
+
+    </rich:panel>
+
+    <div class="actionButtons">
+
+        <s:button view="/CallEdit.xhtml"
+                    id="edit"
+                 value="Edit"/>
+
+        <s:button view="/#{empty callFrom ? 'CallList' : callFrom}.xhtml"
+                    id="done"
+                 value="Done"/>
+
+    </div>
+
+    <rich:tabPanel switchType="ajax">
+
+    <rich:tab>
+        <f:facet name="label">
+            <h:panelGroup><h:graphicImage value="/img/onetomany.gif" style="vertical-align: middle; padding-right: 4px;"/>Sessions</h:panelGroup>
+        </f:facet>
+    <h:form styleClass="association" id="sessionsChildren">
+
+        <h:outputText value="There are no sessions associated with this call."
+                   rendered="#{empty callHome.sessions}"/>
+
+        <rich:dataTable value="#{callHome.sessions}"
+                       var="_session"
+                  rendered="#{not empty callHome.sessions}"
+                rowClasses="rvgRowOne,rvgRowTwo"
+                        id="sessionsTable">
+            <rich:column sortBy="#{_session.id}">
+                <f:facet name="header">Session</f:facet>
+                <h:outputText value="#{_session.id}"/>
+            </rich:column>
+            <rich:column sortBy="#{_session.dateCreated}">
+                <f:facet name="header">Date created</f:facet>
+                <h:outputText value="#{_session.dateCreated}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </rich:column>
+            <rich:column sortBy="#{_session.dateValidated}">
+                <f:facet name="header">Date validated</f:facet>
+                <h:outputText value="#{_session.dateValidated}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </rich:column>
+            <h:column>
+                <f:facet name="header">Action</f:facet>
+                <s:link id="selectsession"
+                     value="Select"
+                      view="/Session.xhtml">
+                    <f:param name="sessionSession"
+                            value="#{_session.id}"/>
+                    <f:param name="sessionFrom" value="Call"/>
+                </s:link>
+            </h:column>
+        </rich:dataTable>
+
+    </h:form>
+
+    <div class="actionButtons">
+        <s:button
+               value="Add session"
+                view="/SessionEdit.xhtml">
+            <f:param name="callId"
+                    value="#{callHome.instance.id}"/>
+            <f:param name="sessionFrom" value="Call"/>
+        </s:button>
+    </div>
+    </rich:tab>
+</rich:tabPanel>
+</ui:define>
+
+</ui:composition>

@@ -1,0 +1,141 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <h:form id="session" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">#{sessionHome.managed ? 'Edit' : 'Add'} Session</f:facet>
+
+
+            <s:decorate id="sessionField" template="layout/edit.xhtml">
+                <ui:define name="label">Session</ui:define>
+                <h:inputText id="session"
+                       required="true"
+                       disabled="#{sessionHome.managed}"
+                          value="#{sessionHome.instance.id}">
+                    <a:support event="onblur" reRender="sessionField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+
+
+            <s:decorate id="dateCreatedField" template="layout/edit.xhtml">
+                <ui:define name="label">Date created</ui:define>
+                <rich:calendar id="dateCreated"
+                          value="#{sessionHome.instance.dateCreated}" datePattern="MM/dd/yyyy hh:mm a"/>
+            </s:decorate>
+
+
+            <s:decorate id="dateValidatedField" template="layout/edit.xhtml">
+                <ui:define name="label">Date validated</ui:define>
+                <rich:calendar id="dateValidated"
+                          value="#{sessionHome.instance.dateValidated}" datePattern="MM/dd/yyyy hh:mm a"/>
+            </s:decorate>
+
+            <div style="clear:both">
+                <span class="required">*</span>
+                required fields
+            </div>
+
+        </rich:panel>
+
+        <div class="actionButtons">
+
+            <h:commandButton id="save"
+                          value="Save"
+                         action="#{sessionHome.persist}"
+                       disabled="#{!sessionHome.wired}"
+                       rendered="#{!sessionHome.managed}"/>
+
+            <h:commandButton id="update"
+                          value="Save"
+                         action="#{sessionHome.update}"
+                       rendered="#{sessionHome.managed}"/>
+
+            <h:commandButton id="delete"
+                          value="Delete"
+                         action="#{sessionHome.remove}"
+                      immediate="true"
+                       rendered="#{sessionHome.managed}"/>
+
+            <s:button id="cancelEdit"
+                   value="Cancel"
+             propagation="end"
+                    view="/Session.xhtml"
+                rendered="#{sessionHome.managed}"/>
+
+            <s:button id="cancelAdd"
+                   value="Cancel"
+             propagation="end"
+                    view="/#{empty sessionFrom ? 'SessionList' : sessionFrom}.xhtml"
+                rendered="#{!sessionHome.managed}"/>
+
+        </div>
+    </h:form>
+
+<rich:tabPanel switchType="ajax">
+
+    <rich:tab label="Call">
+    <div class="association" id="callParent">
+
+        <h:outputText value="There is no call associated with this session."
+                   rendered="#{sessionHome.instance.call == null}"/>
+
+        <rich:dataTable var="_call"
+                   value="#{sessionHome.instance.call}"
+                rendered="#{sessionHome.instance.call != null}"
+              rowClasses="rvgRowOne,rvgRowTwo"
+                      id="callTable">
+            <h:column>
+                <f:facet name="header">Id</f:facet>
+                <h:outputText value="#{_call.id}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Date end</f:facet>
+                <h:outputText value="#{_call.dateEnd}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Date start</f:facet>
+                <h:outputText value="#{_call.dateStart}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Dtmf</f:facet>
+                <h:outputText value="#{_call.dtmf}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">From</f:facet>
+                <h:outputText value="#{_call.from}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">To</f:facet>
+                <h:outputText value="#{_call.to}"/>
+            </h:column>
+        </rich:dataTable>
+
+        <div class="actionButtons">
+            <s:button id="#{sessionHome.instance.call != null ? 'changeParent' : 'selectParent'}" value="#{sessionHome.instance.call != null ? 'Change' : 'Select'} call"
+                       view="/CallList.xhtml">
+                <f:param name="from" value="SessionEdit"/>
+            </s:button>
+        </div>
+
+    </div>
+    </rich:tab>
+</rich:tabPanel>
+</ui:define>
+
+</ui:composition>

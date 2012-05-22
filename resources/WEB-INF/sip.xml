@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+post-constructs*
+	app-name?
+	locale-encoding-mapping-list?
+	login-config? session-config?
+	ejb-references*
+	message-destination-references*
+	security-role* pre-destroys*
+	ejb-local-references*
+	context-param*
+	persistence-context-refs*
+	persistence-unit-refs*
+	message-destination* servlet* resource-environment-references*
+	resource-references* distributable? service-references*
+	servlet-selection? security-constraint* listener* proxy-config?
+	environment-entries* {all descriptionGroup}?
+	{unordered_sequence jndiEnvironmentRefsGroup}?
+-->		
+
+<sip-app>
+ 
+	<app-name>api mobicents demo</app-name>
+	<display-name>SeamEntryPointApplication</display-name>
+	<description>SeamEntryPointApplication</description>
+
+	<main-servlet>
+		SeamEntryPointServlet
+	</main-servlet>
+
+	<servlet>
+		<servlet-name>SeamEntryPointServlet</servlet-name>
+		<display-name>SeamEntryPointServlet</display-name>
+		<description>Seam Entry Point Servlet</description>
+		<servlet-class>
+			org.mobicents.servlet.sip.seam.entrypoint.SeamEntryPointServlet
+		</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<!-- Format needed for mobicents 2.0+
+	<servlet-selection>
+		<main-servlet>
+			SeamEntryPointServlet
+		</main-servlet>
+	</servlet-selection>
+	-->
+
+	<listener>
+		<listener-class>
+			org.mobicents.servlet.sip.seam.entrypoint.SeamEntryPointServlet
+		</listener-class>
+	</listener>
+
+</sip-app>

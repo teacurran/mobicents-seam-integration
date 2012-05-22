@@ -1,0 +1,166 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <h:form id="call" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">#{callHome.managed ? 'Edit' : 'Add'} Call</f:facet>
+
+
+            <s:decorate id="idField" template="layout/edit.xhtml">
+                <ui:define name="label">Id</ui:define>
+                <h:inputText id="id"
+                       required="true"
+                       disabled="#{callHome.managed}"
+                          value="#{callHome.instance.id}">
+                    <a:support event="onblur" reRender="idField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+
+            <s:decorate id="dateEndField" template="layout/edit.xhtml">
+                <ui:define name="label">Date end</ui:define>
+                <rich:calendar id="dateEnd"
+                          value="#{callHome.instance.dateEnd}" datePattern="MM/dd/yyyy hh:mm a"/>
+            </s:decorate>
+
+
+            <s:decorate id="dateStartField" template="layout/edit.xhtml">
+                <ui:define name="label">Date start</ui:define>
+                <rich:calendar id="dateStart"
+                          value="#{callHome.instance.dateStart}" datePattern="MM/dd/yyyy hh:mm a"/>
+            </s:decorate>
+
+
+            <s:decorate id="dtmfField" template="layout/edit.xhtml">
+                <ui:define name="label">Dtmf</ui:define>
+                <h:inputTextarea id="dtmf"
+                               cols="80"
+                               rows="3"
+                              value="#{callHome.instance.dtmf}"/>
+            </s:decorate>
+
+
+            <s:decorate id="fromField" template="layout/edit.xhtml">
+                <ui:define name="label">From</ui:define>
+                <h:inputText id="from"
+                           size="100"
+                      maxlength="100"
+                          value="#{callHome.instance.from}">
+                    <a:support event="onblur" reRender="fromField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+
+
+            <s:decorate id="toField" template="layout/edit.xhtml">
+                <ui:define name="label">To</ui:define>
+                <h:inputText id="to"
+                           size="100"
+                      maxlength="100"
+                          value="#{callHome.instance.to}">
+                    <a:support event="onblur" reRender="toField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+            <div style="clear:both">
+                <span class="required">*</span>
+                required fields
+            </div>
+
+        </rich:panel>
+
+        <div class="actionButtons">
+
+            <h:commandButton id="save"
+                          value="Save"
+                         action="#{callHome.persist}"
+                       disabled="#{!callHome.wired}"
+                       rendered="#{!callHome.managed}"/>
+
+            <h:commandButton id="update"
+                          value="Save"
+                         action="#{callHome.update}"
+                       rendered="#{callHome.managed}"/>
+
+            <h:commandButton id="delete"
+                          value="Delete"
+                         action="#{callHome.remove}"
+                      immediate="true"
+                       rendered="#{callHome.managed}"/>
+
+            <s:button id="cancelEdit"
+                   value="Cancel"
+             propagation="end"
+                    view="/Call.xhtml"
+                rendered="#{callHome.managed}"/>
+
+            <s:button id="cancelAdd"
+                   value="Cancel"
+             propagation="end"
+                    view="/#{empty callFrom ? 'CallList' : callFrom}.xhtml"
+                rendered="#{!callHome.managed}"/>
+
+        </div>
+    </h:form>
+
+<rich:tabPanel switchType="ajax">
+
+    <rich:tab label="Sessions">
+        <h:form styleClass="association" id="sessionsChildren">
+
+            <h:outputText value="There are no sessions associated with this call."
+                       rendered="#{empty callHome.sessions}"/>
+
+            <rich:dataTable value="#{callHome.sessions}"
+                           var="_session"
+                      rendered="#{not empty callHome.sessions}"
+                    rowClasses="rvgRowOne,rvgRowTwo"
+                            id="sessionsTable">
+                <rich:column sortBy="#{_session.id}">
+                    <f:facet name="header">Session</f:facet>
+                    <h:outputText value="#{_session.id}"/>
+                </rich:column>
+                <rich:column sortBy="#{_session.dateCreated}">
+                    <f:facet name="header">Date created</f:facet>
+                    <h:outputText value="#{_session.dateCreated}">
+                        <s:convertDateTime type="both" dateStyle="short"/>
+                    </h:outputText>
+                </rich:column>
+                <rich:column sortBy="#{_session.dateValidated}">
+                    <f:facet name="header">Date validated</f:facet>
+                    <h:outputText value="#{_session.dateValidated}">
+                        <s:convertDateTime type="both" dateStyle="short"/>
+                    </h:outputText>
+                </rich:column>
+            </rich:dataTable>
+
+        </h:form>
+
+        <f:subview rendered="#{callHome.managed}" id="sessions">
+        <div class="actionButtons">
+            <s:button id="addsession"
+                   value="Add session"
+                    view="/SessionEdit.xhtml"
+             propagation="none">
+                 <f:param name="callId"
+                         value="#{callHome.instance.id}"/>
+                 <f:param name="sessionFrom" value="Call"/>
+            </s:button>
+        </div>
+        </f:subview>
+    </rich:tab>
+</rich:tabPanel>
+</ui:define>
+
+</ui:composition>

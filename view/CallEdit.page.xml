@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd"
+      no-conversation-view-id="/CallList.xhtml"
+      login-required="true">
+
+   <begin-conversation join="true" flush-mode="MANUAL"/>
+
+   <action execute="#{callHome.wire}"/>
+
+   <param name="callFrom"/>
+   <param name="callId" value="#{callHome.callId}"/>
+
+
+   <navigation from-action="#{callHome.persist}">
+      <rule if-outcome="persisted">
+         <end-conversation/>
+         <redirect view-id="/Call.xhtml"/>
+      </rule>
+   </navigation>
+
+   <navigation from-action="#{callHome.update}">
+      <rule if-outcome="updated">
+         <end-conversation/>
+         <redirect view-id="/Call.xhtml"/>
+      </rule>
+   </navigation>
+
+   <navigation from-action="#{callHome.remove}">
+      <rule if-outcome="removed">
+         <end-conversation/>
+         <redirect view-id="/CallList.xhtml"/>
+      </rule>
+   </navigation>
+
+</page>

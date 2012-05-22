@@ -1,0 +1,111 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <rich:panel>
+        <f:facet name="header">Session Details</f:facet>
+
+        <s:decorate id="session" template="layout/display.xhtml">
+            <ui:define name="label">Session</ui:define>
+            <h:outputText value="#{sessionHome.instance.id}"/>
+        </s:decorate>
+
+        <s:decorate id="dateCreated" template="layout/display.xhtml">
+            <ui:define name="label">Date created</ui:define>
+            <h:outputText value="#{sessionHome.instance.dateCreated}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </s:decorate>
+
+        <s:decorate id="dateValidated" template="layout/display.xhtml">
+            <ui:define name="label">Date validated</ui:define>
+            <h:outputText value="#{sessionHome.instance.dateValidated}">
+                <s:convertDateTime type="both" dateStyle="short"/>
+            </h:outputText>
+        </s:decorate>
+
+        <div style="clear:both"/>
+
+    </rich:panel>
+
+    <div class="actionButtons">
+
+        <s:button view="/SessionEdit.xhtml"
+                    id="edit"
+                 value="Edit"/>
+
+        <s:button view="/#{empty sessionFrom ? 'SessionList' : sessionFrom}.xhtml"
+                    id="done"
+                 value="Done"/>
+
+    </div>
+
+    <rich:tabPanel switchType="ajax">
+
+    <rich:tab>
+        <f:facet name="label">
+            <h:panelGroup><h:graphicImage value="/img/manytoone.gif" style="vertical-align: middle; padding-right: 4px;"/>Call</h:panelGroup>
+        </f:facet>
+    <div class="association" id="callParent">
+
+        <h:outputText value="There is no call associated with this session."
+                   rendered="#{sessionHome.instance.call == null}"/>
+
+        <rich:dataTable var="_call"
+                   value="#{sessionHome.instance.call}"
+                rendered="#{sessionHome.instance.call != null}"
+              rowClasses="rvgRowOne,rvgRowTwo"
+                      id="callTable">
+            <h:column>
+                <f:facet name="header">Id</f:facet>
+                <h:outputText value="#{_call.id}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Date end</f:facet>
+                <h:outputText value="#{_call.dateEnd}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Date start</f:facet>
+                <h:outputText value="#{_call.dateStart}">
+                    <s:convertDateTime type="both" dateStyle="short"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Dtmf</f:facet>
+                <h:outputText value="#{_call.dtmf}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">From</f:facet>
+                <h:outputText value="#{_call.from}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">To</f:facet>
+                <h:outputText value="#{_call.to}"/>
+            </h:column>
+            <h:column styleClass="action">
+                <f:facet name="header">Action</f:facet>
+                <s:link id="viewcall"
+                     value="View"
+                      view="/Call.xhtml">
+                    <f:param name="callId"
+                           value="#{_call.id}"/>
+                </s:link>
+            </h:column>
+        </rich:dataTable>
+
+    </div>
+    </rich:tab>
+</rich:tabPanel>
+</ui:define>
+
+</ui:composition>
